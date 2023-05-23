@@ -208,18 +208,19 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                         SizedBox(height: 65 * fem),
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 370 * fem,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff5a2f86),
-                                  borderRadius: BorderRadius.circular(40 * fem),
-                                ),
+                        Stack(
+                          children: [
+                            Container(
+                              height: 370 * fem,
+                              decoration: BoxDecoration(
+                                color: const Color(0xff5a2f86),
+                                borderRadius: BorderRadius.circular(40 * fem),
                               ),
-                              Transform.translate(
-                                offset: Offset(0, -445 * fem),
+                            ),
+                            Transform.translate(
+                              offset: Offset(0, -70 * fem),
+                              child: Align(
+                                alignment: Alignment.center,
                                 child: Container(
                                     width: 332 * fem,
                                     height: 120 * fem,
@@ -251,15 +252,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ),
                                     )),
                               ),
-                              Transform.translate(
-                                offset: Offset(0, -472 * fem),
+                            ),
+                            Transform.translate(
+                              offset: Offset(0, 19 * fem),
+                              child: Align(
+                                alignment: Alignment.center,
                                 child: Container(
+                                  padding: EdgeInsets.all(15 * fem),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius:
                                         BorderRadius.circular(40 * fem),
                                   ),
-                                  padding: EdgeInsets.all(15 * fem),
                                   width: 332 * fem,
                                   height: 332 * fem,
                                   child: _talkingAI
@@ -278,58 +282,51 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Transform.translate(
-                          offset: Offset(0, -400 * fem),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_ableRecording) {
-                                _onRecordButtonPressed();
-                              }
-                            },
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                width: 68 * fem,
-                                height: 68 * fem,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xfffefdff)),
-                                  color: const Color(0x00d9d9d9),
-                                  borderRadius: BorderRadius.circular(34 * fem),
-                                ),
-                                child: Center(
-                                  // rectangle9aKp (26:109)
-                                  child: _isRecording
-                                      ? SizedBox(
-                                          width: double.infinity,
-                                          height: 33 * fem,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      5 * fem),
-                                              color: const Color(0xffdce670),
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          width: double.infinity,
-                                          height: 55 * fem,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      27.5 * fem),
-                                              color: _ableRecording
-                                                  ? const Color(0xffb92771)
-                                                  : const Color(0xff727272),
-                                            ),
+                        SizedBox(
+                          height: 50 * fem,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (_ableRecording) {
+                              _onRecordButtonPressed();
+                            }
+                          },
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 68 * fem,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: const Color(0xfffefdff)),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                // rectangle9aKp (26:109)
+                                child: _isRecording
+                                    ? SizedBox(
+                                        width: 33 * fem,
+                                        height: 33 * fem,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xffdce670),
                                           ),
                                         ),
-                                ),
+                                      )
+                                    : SizedBox(
+                                        width: 55 * fem,
+                                        height: 55 * fem,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: _ableRecording
+                                                ? const Color(0xffb92771)
+                                                : const Color(0xff727272),
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
