@@ -58,7 +58,7 @@ class TextFieldInput extends StatelessWidget {
                 fontFamily: 'SUITE',
                 fontSize: 16 * ffem,
                 fontWeight: FontWeight.w700,
-                color: subTextColor,
+                color: mainTextColor,
               ),
               decoration: InputDecoration(
                 hintText: hintText,

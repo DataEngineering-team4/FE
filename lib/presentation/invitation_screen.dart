@@ -1,11 +1,18 @@
 import 'package:ai4005_fe/util/color.dart';
 import 'package:ai4005_fe/widget/text_field_input.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../util/util.dart';
 import '../widget/button.dart';
 
 class InvitationScreen extends StatefulWidget {
-  const InvitationScreen({super.key});
+  Uint8List? image;
+  InvitationScreen({
+    this.image,
+    super.key,
+  });
 
   @override
   State<InvitationScreen> createState() => _InvitationScreenState();
@@ -13,6 +20,14 @@ class InvitationScreen extends StatefulWidget {
 
 class _InvitationScreenState extends State<InvitationScreen> {
   final TextEditingController _newUsernameController = TextEditingController();
+  Uint8List? newImage;
+
+  Future getImage(ImageSource imageSource) async {
+    Uint8List im = await pickImage(imageSource);
+    setState(() {
+      newImage = im;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +43,10 @@ class _InvitationScreenState extends State<InvitationScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-                height: 140 * fem,
+                height: 70 * fem,
               ),
               SizedBox(
-                width: 176 * fem,
+                width: 175 * fem,
                 child: Image.asset(
                   "assets/images/characters/invitation.png",
                   fit: BoxFit.cover,
@@ -80,7 +95,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 ),
               ),
               SizedBox(
-                height: 25 * fem,
+                height: 15 * fem,
               ),
               TextFieldInput(
                 textEditingController: _newUsernameController,
@@ -89,7 +104,46 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 imageText: 'assets/images/icons/user.png',
               ),
               SizedBox(
-                height: 140 * fem,
+                height: 20 * fem,
+              ),
+              GestureDetector(
+                onTap: () {
+                  getImage(ImageSource.gallery);
+                },
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxHeight: 250 * fem,
+                  ),
+                  padding: EdgeInsets.all(0 * fem),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 10.0,
+                      color: const Color(0xff61418e),
+                    ),
+                    borderRadius: BorderRadius.circular(20 * fem),
+                    color: const Color(0xff61418e),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10 * fem),
+                    child: newImage == null
+                        ? widget.image != null
+                            ? Image(
+                                image: MemoryImage(widget.image!),
+                                fit: BoxFit.cover,
+                              )
+                            : const Image(
+                                image: NetworkImage(
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwVLdSDmgrZN7TkzbHJb8dD0_7ASUQuERL2A&usqp=CAU'),
+                              )
+                        : Image(
+                            image: MemoryImage(newImage!),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30 * fem,
               ),
               GestureDetector(
                 onTap: () {

@@ -34,6 +34,7 @@ dependencies:
   flutter_sound: ^9.2.13
   google_fonts: ^4.0.4
   http: ^0.13.5
+  image_picker: ^0.8.7+5
   just_audio: ^0.9.32
 
 dev_dependencies:
@@ -71,7 +72,6 @@ flutter:
     - assets/images/char_img/temp_muscle.png
     - assets/gifs/happy_idle_AdobeExpress.gif
     - assets/gifs/punching_bag_AdobeExpress.gif
-
     # - assets/catTalk.gif
     # - assets/closemouth.jpeg
     # - assets/basic.gif
@@ -90,19 +90,19 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: SUITE
-    fonts: 
-      - asset: assets/fonts/SUITE-Variable.ttf
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+    - family: SUITE
+      fonts:
+        - asset: assets/fonts/SUITE-Variable.ttf
+    #   - family: Schyler
+    #     fonts:
+    #       - asset: fonts/Schyler-Regular.ttf
+    #       - asset: fonts/Schyler-Italic.ttf
+    #         style: italic
+    #   - family: Trajan Pro
+    #     fonts:
+    #       - asset: fonts/TrajanPro.ttf
+    #       - asset: fonts/TrajanPro_Bold.ttf
+    #         weight: 700
+    #
+    # For details regarding fonts from package dependencies,
+    # see https://flutter.dev/custom-fonts/#from-packages
