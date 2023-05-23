@@ -1,19 +1,37 @@
+import 'dart:typed_data';
+
 import 'package:ai4005_fe/presentation/invitation_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class Create extends StatelessWidget {
+import '../util/util.dart';
+
+class Create extends StatefulWidget {
   const Create({super.key});
+
+  @override
+  State<Create> createState() => _CreateState();
+}
+
+class _CreateState extends State<Create> {
+  Uint8List? image;
+
+  Future getImage(ImageSource imageSource) async {
+    image = await pickImage(imageSource);
+  }
 
   @override
   Widget build(BuildContext context) {
     double baseWidth = 393;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await getImage(ImageSource.gallery);
+        if (!mounted) return;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: ((context) => const InvitationScreen())));
+                builder: ((context) => InvitationScreen(image: image))));
       },
       child: SizedBox(
         width: 10 * fem,

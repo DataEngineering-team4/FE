@@ -16,6 +16,7 @@ class SelectCharacterScreen extends StatefulWidget {
 
 class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
   int selected_index = -1;
+
   final List<Map> friends = [
     const {
       'image_name': 'temp_yellow.png',
