@@ -111,6 +111,9 @@ class _InvitationScreenState extends State<InvitationScreen> {
                   getImage(ImageSource.gallery);
                 },
                 child: Container(
+                  constraints: BoxConstraints(
+                    maxHeight: 250 * fem,
+                  ),
                   padding: EdgeInsets.all(0 * fem),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -126,7 +129,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                         ? widget.image != null
                             ? Image(
                                 image: MemoryImage(widget.image!),
-                                height: 250 * fem,
+                                fit: BoxFit.cover,
                               )
                             : const Image(
                                 image: NetworkImage(
@@ -134,7 +137,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                               )
                         : Image(
                             image: MemoryImage(newImage!),
-                            height: 250 * fem,
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ),
