@@ -6,14 +6,14 @@ import 'package:image_picker/image_picker.dart';
 
 import '../util/util.dart';
 
-class Create extends StatefulWidget {
-  const Create({super.key});
+class CreateFriend extends StatefulWidget {
+  const CreateFriend({super.key});
 
   @override
-  State<Create> createState() => _CreateState();
+  State<CreateFriend> createState() => _CreateFriendState();
 }
 
-class _CreateState extends State<Create> {
+class _CreateFriendState extends State<CreateFriend> {
   Uint8List? image;
 
   Future getImage(ImageSource imageSource) async {
@@ -31,7 +31,7 @@ class _CreateState extends State<Create> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: ((context) => InvitationScreen(image: image))));
+                builder: ((context) => InvitationScreen(image: image!))));
       },
       child: SizedBox(
         width: 10 * fem,

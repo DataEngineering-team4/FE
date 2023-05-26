@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../object/message.dart';
 
@@ -26,76 +25,10 @@ class AudioRecorderController {
     return _recordingFilePath;
   }
 
-  Future<String> sendAudioData(String filePath) async {
+  void sendAudioData(WebSocketChannel channel, String filePath) async {
     final audioFileBytes = await File(filePath).readAsBytes();
     final base64AudioFile = base64Encode(audioFileBytes);
-
-    //messageList to Json
-    List<Map<String, String>> messageListJson = messageList
-            ?.map((message) => {
-                  'role': message.role,
-                  'content': message.content,
-                })
-            .toList() ??
-        [];
-
-    final response = await http.post(
-      Uri.parse(
-          'https://wgmywho6v8.execute-api.ap-northeast-2.amazonaws.com/v1/answer'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'audio': base64AudioFile,
-        'messages': messageListJson,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('200is right');
-
-      final jsonResponse = jsonDecode(response.body);
-      final audioUrl = jsonResponse['audio_url'];
-      final messageListJson = jsonResponse['messages'];
-      final List<Message> updatedMessageList = [];
-
-      //receive json and update messageList
-      if (messageListJson != null) {
-        messageListJson.forEach((messageJson) {
-          final message = Message(
-            role: messageJson['role'],
-            content: messageJson['content'],
-          );
-          updatedMessageList.add(message);
-        });
-      }
-
-      // Update messageList with updatedMessageList
-      messageList = updatedMessageList;
-
-      //for test -> messageList를 json형태로 볼 수 있음.
-      if (messageList != null) {
-        // Convert messageList to JSON string
-        List<Map<String, String>> messageListJson = messageList
-                ?.map((message) => {
-                      'role': message.role,
-                      'content': message.content,
-                    })
-                .toList() ??
-            [];
-
-        print(messageListJson);
-      }
-
-      log(response.body);
-      if (audioUrl == null) {
-        return '';
-      } else {
-        return audioUrl;
-      }
-    } else {
-      print('not 200');
-      log(response.body);
-      return '';
-    }
+    channel.sink.add(jsonEncode({'audio_file': base64AudioFile}));
   }
 
   void dispose() {

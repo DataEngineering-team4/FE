@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../view_model/audio_recorder_controller.dart';
 import '../widget/button.dart';
-import '../widget/create.dart';
+import '../widget/create_friend.dart';
 
 class SelectCharacterScreen extends StatefulWidget {
   const SelectCharacterScreen({super.key});
@@ -105,7 +105,7 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                         ),
                       );
                     } else {
-                      return const Create();
+                      return const CreateFriend();
                     }
                   }),
             ),

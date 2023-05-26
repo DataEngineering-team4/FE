@@ -1,8 +1,13 @@
-import 'package:ai4005_fe/presentation/first_screen.dart';
+import 'package:ai4005_fe/presentation/login_screen.dart';
+import 'package:ai4005_fe/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => UserProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,8 +20,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xff411972),
       ),
-      //home: const FirstScreen(),
-      home: const FirstScreen(),
+      home: const LoginScreen(),
+      // home: ChatScreen(
+      //   audioRecorderController: AudioRecorderController(),
+      // ),
     );
   }
 }
