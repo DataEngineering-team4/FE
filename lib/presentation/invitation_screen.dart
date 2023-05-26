@@ -1,8 +1,7 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:ai4005_fe/util/color.dart';
 import 'package:ai4005_fe/widget/text_field_input.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +12,7 @@ import '../util/util.dart';
 import '../widget/button.dart';
 
 class InvitationScreen extends StatefulWidget {
-  Uint8List image;
+  File image;
   InvitationScreen({
     required this.image,
     super.key,
@@ -25,7 +24,7 @@ class InvitationScreen extends StatefulWidget {
 
 class _InvitationScreenState extends State<InvitationScreen> {
   final TextEditingController _friendNameController = TextEditingController();
-  late Uint8List image;
+  late File image;
   bool _isloading = false;
 
   @override
@@ -36,7 +35,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
   }
 
   Future getImage(ImageSource imageSource) async {
-    Uint8List im = await pickImage(imageSource);
+    File im = await pickImage(imageSource);
     setState(() {
       image = im;
     });
@@ -49,21 +48,31 @@ class _InvitationScreenState extends State<InvitationScreen> {
     setState(() {
       _isloading = true;
     });
-    final response =
-        await http.post(Uri.parse('http://www.det4.site:5000/user/drawing/'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "file": image,
-              "name": _friendNameController.text,
-              "user_id":
-                  Provider.of<UserProvider>(context, listen: false).getUser.uid,
-            }));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://www.det4.site:5000/drawing/'));
+
+    request.fields['name'] = _friendNameController.text;
+    request.fields['user_id'] =
+        Provider.of<UserProvider>(context, listen: false)
+            .getUser
+            .uid
+            .toString();
+    request.files.add(http.MultipartFile.fromBytes(
+        'file', image.readAsBytesSync(),
+        filename: 'example.png'));
+
+    var response = await request.send();
 
     setState(() {
       _isloading = false;
     });
 
-    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print('Uploaded successfully.');
+      Navigator.pop(context);
+    } else {
+      showSnackBar("Failed to upload", context);
+    }
   }
 
   @override
@@ -164,16 +173,16 @@ class _InvitationScreenState extends State<InvitationScreen> {
                     borderRadius: BorderRadius.circular(10 * fem),
                     child: image == null
                         ? widget.image != null
-                            ? Image(
-                                image: MemoryImage(widget.image),
+                            ? Image.file(
+                                widget.image,
                                 fit: BoxFit.cover,
                               )
                             : const Image(
                                 image: NetworkImage(
                                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwVLdSDmgrZN7TkzbHJb8dD0_7ASUQuERL2A&usqp=CAU'),
                               )
-                        : Image(
-                            image: MemoryImage(image),
+                        : Image.file(
+                            image,
                             fit: BoxFit.cover,
                           ),
                   ),
