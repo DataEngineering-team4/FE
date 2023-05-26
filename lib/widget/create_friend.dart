@@ -31,7 +31,7 @@ class _CreateFriendState extends State<CreateFriend> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: ((context) => InvitationScreen(image: image))));
+                builder: ((context) => InvitationScreen(image: image!))));
       },
       child: SizedBox(
         width: 10 * fem,
