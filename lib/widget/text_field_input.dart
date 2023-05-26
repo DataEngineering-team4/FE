@@ -60,6 +60,7 @@ class TextFieldInput extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: mainTextColor,
               ),
+              obscureText: isPass,
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: TextStyle(
@@ -74,7 +75,6 @@ class TextFieldInput extends StatelessWidget {
                 contentPadding: const EdgeInsets.all(8),
               ),
               keyboardType: textInputType,
-              obscureText: isPass,
             ),
           ),
         ],

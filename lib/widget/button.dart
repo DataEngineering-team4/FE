@@ -5,9 +5,11 @@ import '../util/color.dart';
 class Button extends StatelessWidget {
   final String text;
   final double width;
+  final bool isLoading;
   const Button({
     required this.text,
     required this.width,
+    this.isLoading = false,
     Key? key,
   }) : super(key: key);
 
@@ -24,16 +26,22 @@ class Button extends StatelessWidget {
         borderRadius: BorderRadius.circular(100 * fem),
       ),
       child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'SUITE',
-            fontSize: 20 * ffem,
-            fontWeight: FontWeight.w700,
-            color: buttonTextColor,
-          ),
-        ),
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: mainTextColor,
+                ),
+              )
+            : Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'SUITE',
+                  fontSize: 20 * ffem,
+                  fontWeight: FontWeight.w700,
+                  color: buttonTextColor,
+                ),
+              ),
       ),
     );
   }

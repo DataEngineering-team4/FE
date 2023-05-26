@@ -1,9 +1,11 @@
 import 'package:ai4005_fe/presentation/select_character_screen.dart';
 import 'package:ai4005_fe/presentation/signup_screen.dart';
+import 'package:ai4005_fe/resources/authentication_service.dart';
 import 'package:ai4005_fe/util/color.dart';
 import 'package:ai4005_fe/widget/text_field_input.dart';
 import 'package:flutter/material.dart';
 
+import '../util/util.dart';
 import '../widget/button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,8 +16,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  void login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String response = await loginUser(
+      username: _usernameController.text,
+      password: _passwordController.text,
+      context: context,
+    );
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response == "success") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: ((context) => const SelectCharacterScreen())));
+    } else {
+      showSnackBar(response, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +108,10 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 20 * fem,
             ),
             TextFieldInput(
-              imageText: 'assets/images/icons/mail.png',
-              textEditingController: _emailController,
-              hintText: '이메일',
-              textInputType: TextInputType.emailAddress,
+              imageText: 'assets/images/icons/user.png',
+              textEditingController: _usernameController,
+              hintText: '아이디',
+              textInputType: TextInputType.text,
             ),
             SizedBox(
               height: 20 * fem,
@@ -94,21 +120,18 @@ class _LoginScreenState extends State<LoginScreen> {
               imageText: 'assets/images/icons/lock.png',
               textEditingController: _passwordController,
               hintText: '비밀번호',
-              textInputType: TextInputType.emailAddress,
+              textInputType: TextInputType.text,
+              isPass: true,
             ),
             SizedBox(
               height: 40 * fem,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const SelectCharacterScreen())));
-              },
+              onTap: login,
               child: Button(
                 width: 120 * fem,
                 text: '로그인',
+                isLoading: _isLoading,
               ),
             )
           ],

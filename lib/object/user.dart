@@ -1,6 +1,6 @@
 class User {
   final String email;
-  final String uid;
+  final int uid;
   final String username;
 
   const User({
@@ -8,17 +8,6 @@ class User {
     required this.uid,
     required this.email,
   });
-/*
-  static User fromJson(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
-
-    return User(   
-      username: snapshot["username"],
-      uid: snapshot["uid"],
-      email: snapshot["email"],
-    );
-  }
-*/
 
   Map<String, dynamic> toJson() => {
         "username": username,

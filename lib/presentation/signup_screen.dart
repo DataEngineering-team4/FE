@@ -1,9 +1,11 @@
 import 'package:ai4005_fe/presentation/login_screen.dart';
 import 'package:ai4005_fe/presentation/select_character_screen.dart';
+import 'package:ai4005_fe/resources/authentication_service.dart';
 import 'package:ai4005_fe/util/color.dart';
 import 'package:ai4005_fe/widget/text_field_input.dart';
 import 'package:flutter/material.dart';
 
+import '../util/util.dart';
 import '../widget/button.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -17,6 +19,33 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  void signup() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String response = await signupUser(
+      username: _usernameController.text,
+      password: _passwordController.text,
+      email: _emailController.text,
+      context: context,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response == "success") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: ((context) => const SelectCharacterScreen())));
+    } else {
+      showSnackBar(response, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
             TextFieldInput(
               imageText: 'assets/images/icons/user.png',
               textEditingController: _usernameController,
-              hintText: '김긍정',
+              hintText: '아이디',
               textInputType: TextInputType.text,
             ),
             SizedBox(
@@ -94,7 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
             TextFieldInput(
               imageText: 'assets/images/icons/mail.png',
               textEditingController: _emailController,
-              hintText: 'smile@gmail.com',
+              hintText: '이메일',
               textInputType: TextInputType.emailAddress,
             ),
             SizedBox(
@@ -105,20 +134,17 @@ class _SignupScreenState extends State<SignupScreen> {
               textEditingController: _passwordController,
               hintText: '비밀번호',
               textInputType: TextInputType.text,
+              isPass: true,
             ),
             SizedBox(
               height: 40 * fem,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const SelectCharacterScreen())));
-              },
+              onTap: signup,
               child: Button(
                 width: 120 * fem,
                 text: '회원가입',
+                isLoading: _isLoading,
               ),
             )
           ],
