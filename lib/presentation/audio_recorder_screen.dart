@@ -1,23 +1,98 @@
 import 'package:ai4005_fe/view_model/audio_recorder_controller.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-class AudioRecorderScreen extends StatefulWidget {
+import "../object/message.dart";
+
+class ChatScreen extends StatefulWidget {
   final AudioRecorderController audioRecorderController;
-
-  const AudioRecorderScreen({
+  const ChatScreen({
     required this.audioRecorderController,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<AudioRecorderScreen> createState() => _AudioRecorderScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _AudioRecorderScreenState extends State<AudioRecorderScreen> {
+class _ChatScreenState extends State<ChatScreen> {
+  final channel = WebSocketChannel.connect(
+    Uri.parse('ws://4.230.8.32:8000/talk/test/'),
+  );
   bool _isRecording = false;
   bool _ableRecording = true;
-  bool _talkingAI = false;
+  static bool _talkingAI = false;
+
+  final player = AudioPlayer();
+  final playlist = [];
+
+  void playNextAudio() async {
+    print(playlist);
+    if (playlist.isNotEmpty) {
+      print("HERE!");
+      // If there are any URLs in the queue...
+      await player.setUrl(playlist.removeAt(0));
+      await player.play(); // Start playing.
+      await player.pause();
+    }
+  }
+
+  void listen() async {
+    channel.stream.listen((message) async {
+      Response response = Response.toResponse(message);
+      if (response.isInputText()) {
+        print('DO SOMETHING FOR INPUT TEXT');
+        print(response.content);
+      } else if (response.isAudioUrl()) {
+        print('TALKING AI To TRUE');
+        playlist.add(response.content);
+        print(player.playing);
+        if (!player.playing) {
+          playNextAudio();
+        }
+      } else if (response.isOutputText()) {
+        print('DO SOMETHING FOR OUTPUT TEXT');
+        print(response.content);
+      } else if (response.isFinish()) {
+        print('TALKING AI To FALSE');
+        setState(() {
+          _talkingAI = false;
+          _ableRecording = true;
+        });
+      } else {
+        print('FUCKIND ELSE!');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listen();
+    player.playerStateStream.listen((state) {
+      if (state.playing) {}
+      switch (state.processingState) {
+        case ProcessingState.idle:
+          break;
+        case ProcessingState.loading:
+          break;
+        case ProcessingState.buffering:
+          break;
+        case ProcessingState.ready:
+          break;
+        case ProcessingState.completed:
+          playNextAudio();
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
 
   void _onRecordButtonPressed() async {
     setState(() {
@@ -28,46 +103,11 @@ class _AudioRecorderScreenState extends State<AudioRecorderScreen> {
       await widget.audioRecorderController.startRecording();
     } else {
       setState(() {
-        _ableRecording = !_ableRecording;
+        _ableRecording = false;
       });
       String? filePath = await widget.audioRecorderController.stopRecording();
       if (filePath != null) {
-        String audioUrl =
-            await widget.audioRecorderController.sendAudioData(filePath);
-        // DEBUG: Play audio file
-        AudioPlayer audioPlayer = AudioPlayer();
-
-        if (audioUrl != '') {
-          await audioPlayer.setSourceUrl(audioUrl);
-          setState(() {
-            _talkingAI = !_talkingAI;
-          });
-          Duration? duration = await audioPlayer.getDuration();
-          await audioPlayer.play(UrlSource(audioUrl));
-          if (duration != null) {
-            await Future.delayed(duration, () {
-              setState(() {
-                _talkingAI = !_talkingAI;
-                _ableRecording = !_ableRecording;
-              });
-            });
-          }
-        } else {
-          await audioPlayer.setSourceDeviceFile(filePath);
-          setState(() {
-            _talkingAI = !_talkingAI;
-          });
-          Duration? duration = await audioPlayer.getDuration();
-          await audioPlayer.play(DeviceFileSource(filePath));
-          if (duration != null) {
-            await Future.delayed(duration, () {
-              setState(() {
-                _talkingAI = !_talkingAI;
-                _ableRecording = !_ableRecording;
-              });
-            });
-          }
-        }
+        widget.audioRecorderController.sendAudioData(channel, filePath);
       }
     }
   }
