@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai4005_fe/presentation/select_character_screen.dart';
 import 'package:ai4005_fe/util/color.dart';
 import 'package:ai4005_fe/widget/text_field_input.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +43,6 @@ class _InvitationScreenState extends State<InvitationScreen> {
   }
 
   void invite() async {
-    print(Provider.of<UserProvider>(context, listen: false).getUser.uid);
-    print(Provider.of<UserProvider>(context, listen: false).getUser.username);
-
     setState(() {
       _isloading = true;
     });
@@ -70,6 +68,11 @@ class _InvitationScreenState extends State<InvitationScreen> {
     if (response.statusCode == 200) {
       print('Uploaded successfully.');
       Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SelectCharacterScreen(),
+          ));
     } else {
       showSnackBar("Failed to upload", context);
     }
@@ -91,11 +94,16 @@ class _InvitationScreenState extends State<InvitationScreen> {
               SizedBox(
                 height: 70 * fem,
               ),
-              SizedBox(
-                width: 175 * fem,
-                child: Image.asset(
-                  "assets/images/characters/invitation.png",
-                  fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SizedBox(
+                  width: 175 * fem,
+                  child: Image.asset(
+                    "assets/images/characters/invitation.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(

@@ -1,4 +1,4 @@
-import 'package:ai4005_fe/presentation/login_screen.dart';
+import 'package:ai4005_fe/presentation/first_screen.dart';
 import 'package:ai4005_fe/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xff411972),
       ),
-      home: const LoginScreen(),
+      home: const FirstScreen(),
       // home: ChatScreen(
       //   audioRecorderController: AudioRecorderController(),
       // ),

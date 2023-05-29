@@ -28,10 +28,12 @@ class _CreateFriendState extends State<CreateFriend> {
       onTap: () async {
         await getImage(ImageSource.gallery);
         if (!mounted) return;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => InvitationScreen(image: image!))));
+        if (image != null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: ((context) => InvitationScreen(image: image!))));
+        }
       },
       child: SizedBox(
         width: 10 * fem,
