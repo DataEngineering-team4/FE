@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:ai4005_fe/presentation/invitation_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class CreateFriend extends StatefulWidget {
 }
 
 class _CreateFriendState extends State<CreateFriend> {
-  Uint8List? image;
+  File? image;
 
   Future getImage(ImageSource imageSource) async {
     image = await pickImage(imageSource);
@@ -28,10 +28,12 @@ class _CreateFriendState extends State<CreateFriend> {
       onTap: () async {
         await getImage(ImageSource.gallery);
         if (!mounted) return;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => InvitationScreen(image: image!))));
+        if (image != null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: ((context) => InvitationScreen(image: image!))));
+        }
       },
       child: SizedBox(
         width: 10 * fem,

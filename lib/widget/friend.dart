@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../util/color.dart';
 
 class Friend extends StatefulWidget {
-  final String image_name;
+  final String image_link;
   final String friend_name;
-  final bool is_made;
+  final String status;
   final bool is_selected;
 
   const Friend({
-    required this.image_name,
+    required this.image_link,
     required this.friend_name,
-    required this.is_made,
+    required this.status,
     required this.is_selected,
     Key? key,
   }) : super(key: key);
@@ -42,8 +42,9 @@ class _FriendState extends State<Friend> {
                 height: 120 * fem,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10 * fem),
-                  child: Image.asset(
-                    "assets/images/char_img/${widget.image_name}", // Use the image_name property from the widget
+                  child: Image.network(
+                    widget
+                        .image_link, // Use the image_link property from the widget
                     fit: BoxFit.fitHeight,
                   ),
                 ),
@@ -82,7 +83,7 @@ class _FriendState extends State<Friend> {
               ),
               Center(
                   child: Opacity(
-                      opacity: widget.is_made ? 0 : 0.7,
+                      opacity: widget.status == "active" ? 0 : 0.7,
                       child: Container(
                         width: 110 * fem,
                         height: 110 * fem,

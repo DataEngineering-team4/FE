@@ -1,12 +1,12 @@
-import 'package:ai4005_fe/presentation/login_screen.dart';
-import 'package:ai4005_fe/presentation/select_character_screen.dart';
-import 'package:ai4005_fe/resources/authentication_service.dart';
-import 'package:ai4005_fe/util/color.dart';
-import 'package:ai4005_fe/widget/text_field_input.dart';
 import 'package:flutter/material.dart';
 
+import '../resources/authentication_service.dart';
+import '../util/color.dart';
 import '../util/util.dart';
 import '../widget/button.dart';
+import '../widget/text_field_input.dart';
+import 'login_screen.dart';
+import 'select_character_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
