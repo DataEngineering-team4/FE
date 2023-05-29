@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:ai4005_fe/view_model/audio_recorder_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import "../object/message.dart";
+import '../providers/user_provider.dart';
 import '../util/color.dart';
 
 class ChatScreen extends StatefulWidget {
   final AudioRecorderController audioRecorderController;
+  final int drawingNumber;
+  final String charName;
   const ChatScreen({
+    required this.charName,
     required this.audioRecorderController,
+    required this.drawingNumber,
     Key? key,
   }) : super(key: key);
 
@@ -19,11 +28,13 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final channel = WebSocketChannel.connect(
-    Uri.parse('ws://4.230.8.32:8000/talk/test/'),
+    Uri.parse('ws://www.det4.site:5000/talk/admin/'),
   );
   bool _isRecording = false;
   bool _ableRecording = true;
   static bool _talkingAI = false;
+  Map<String, String> animationLinks = {};
+  String aiText = "";
 
   final player = AudioPlayer();
   final playlist = [];
@@ -55,6 +66,9 @@ class _ChatScreenState extends State<ChatScreen> {
       } else if (response.isOutputText()) {
         print('DO SOMETHING FOR OUTPUT TEXT');
         print(response.content);
+        setState(() {
+          aiText += " ${response.content}";
+        });
       } else if (response.isFinish()) {
         print('TALKING AI To FALSE');
         setState(() {
@@ -67,9 +81,34 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  void getGif() async {
+    final uid = Provider.of<UserProvider>(context, listen: false).getUser.uid;
+    final drawingId = widget.drawingNumber;
+    print(uid);
+    print(drawingId);
+    final response = await http.get(
+      Uri.parse(
+          'http://www.det4.site:5000/animation/?user_id=$uid&drawing_id=$drawingId'),
+      headers: {'Content-Type': 'application/json'},
+    );
+    print(response.statusCode);
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    for (var item in jsonResponse) {
+      animationLinks[item['purpose']] = item['link'];
+    }
+    print("what'sgoing on");
+    setState() {}
+
+    print(animationLinks['talking1']);
+    print(animationLinks['listen1']);
+    print(animationLinks['wait1']);
+  }
+
   @override
   void initState() {
     super.initState();
+    getGif();
     listen();
     player.playerStateStream.listen((state) {
       if (state.playing) {}
@@ -160,7 +199,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         Navigator.pop(context);
                                       },
                                       child: Text(
-                                        '귀여운 졸라맨',
+                                        widget.charName,
                                         style: TextStyle(
                                           fontFamily: 'SUITE',
                                           fontSize: 24 * ffem,
@@ -294,17 +333,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                     width: 332 * fem,
                                     height: 332 * fem,
                                     child: _talkingAI
-                                        ? Image.asset(
-                                            'assets/gifs/punching_bag_AdobeExpress.gif',
+                                        ? Image.network(
+                                            animationLinks['talking1'] ??
+                                                "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
                                             fit: BoxFit.cover,
                                           )
                                         : _ableRecording
-                                            ? Image.asset(
-                                                'assets/gifs/happy_idle_AdobeExpress.gif',
+                                            ? Image.network(
+                                                animationLinks['wait1'] ??
+                                                    "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
                                                 fit: BoxFit.cover,
                                               )
-                                            : Image.asset(
-                                                'assets/images/char_img/temp_main.png',
+                                            : Image.network(
+                                                animationLinks['listen1'] ??
+                                                    "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
                                                 fit: BoxFit.fitHeight,
                                               ),
                                   ),
@@ -333,8 +375,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               color: Colors.white,
                             ),
                             child: Text(
-                              '귀여운 졸라맨: 안녕하세요 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세, 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세,동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세',
-                              //'귀여운 졸라맨: 안녕하세요',
+                              aiText,
                               style: TextStyle(
                                 fontFamily: 'SUITE',
                                 fontSize: 22 * ffem,

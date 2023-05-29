@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ai4005_fe/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -75,17 +76,14 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                     SizedBox(
                       height: 17 * fem,
                     ),
-                    Material(
-                      type: MaterialType.transparency,
-                      child: Text(
-                        '나의 캐릭터',
-                        style: TextStyle(
-                          fontFamily: 'SUITE',
-                          fontSize: 32 * ffem,
-                          fontWeight: FontWeight.w700,
-                          height: 1.2575 * ffem / fem,
-                          color: mainTextColor,
-                        ),
+                    Text(
+                      '나의 캐릭터',
+                      style: TextStyle(
+                        fontFamily: 'SUITE',
+                        fontSize: 32 * ffem,
+                        fontWeight: FontWeight.w700,
+                        height: 1.2575 * ffem / fem,
+                        color: mainTextColor,
                       ),
                     ),
                     SizedBox(
@@ -126,19 +124,32 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                             }
                           }),
                     ),
-                    Container(
-                      height: 20 * fem,
+                    GestureDetector(
+                      onTap: () {
+                        print(friends[selected_index]['id']);
+                        print(friends[selected_index]['name']);
+                      },
+                      child: Container(
+                        color: Colors.red,
+                        height: 20 * fem,
+                      ),
                     ),
                     GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              //여기서 drawing id도 넘겨줘야 함.
-                              MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                    audioRecorderController:
-                                        AudioRecorderController()),
-                              ));
+                          if (selected_index == -1) {
+                            showSnackBar("친구를 골라 주세요.", context);
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                      charName: friends[selected_index]['name'],
+                                      drawingNumber: friends[selected_index]
+                                          ['id'],
+                                      audioRecorderController:
+                                          AudioRecorderController()),
+                                ));
+                          }
                         },
                         child: Button(
                           width: baseWidth * 7 / 8,
