@@ -1,7 +1,9 @@
-import 'package:ai4005_fe/presentation/first_screen.dart';
-import 'package:ai4005_fe/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'presentation/chat_screen.dart';
+import 'providers/user_provider.dart';
+import 'view_model/audio_recorder_controller.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -20,10 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xff411972),
       ),
-      home: const FirstScreen(),
-      // home: ChatScreen(
-      //   audioRecorderController: AudioRecorderController(),
-      // ),
+      //home: const FirstScreen(),
+      home: ChatScreen(
+        audioRecorderController: AudioRecorderController(),
+      ),
     );
   }
 }

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:ai4005_fe/presentation/chat_screen.dart';
-import 'package:ai4005_fe/util/color.dart';
-import 'package:ai4005_fe/widget/friend.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
+import '../util/color.dart';
 import '../view_model/audio_recorder_controller.dart';
 import '../widget/button.dart';
 import '../widget/create_friend.dart';
+import '../widget/friend.dart';
+import 'chat_screen.dart';
 
 class SelectCharacterScreen extends StatefulWidget {
   const SelectCharacterScreen({super.key});
@@ -133,6 +133,7 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                         onTap: () {
                           Navigator.push(
                               context,
+                              //여기서 drawing id도 넘겨줘야 함.
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
                                     audioRecorderController:

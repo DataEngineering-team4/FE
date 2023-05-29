@@ -1,9 +1,9 @@
-import 'package:ai4005_fe/presentation/login_screen.dart';
-import 'package:ai4005_fe/presentation/signup_screen.dart';
-import 'package:ai4005_fe/util/color.dart';
 import 'package:flutter/material.dart';
 
+import '../util/color.dart';
 import '../widget/button.dart';
+import 'login_screen.dart';
+import 'signup_screen.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
