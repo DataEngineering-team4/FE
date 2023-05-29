@@ -124,15 +124,8 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                             }
                           }),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        print(friends[selected_index]['id']);
-                        print(friends[selected_index]['name']);
-                      },
-                      child: Container(
-                        color: Colors.red,
-                        height: 20 * fem,
-                      ),
+                    Container(
+                      height: 20 * fem,
                     ),
                     GestureDetector(
                         onTap: () {
