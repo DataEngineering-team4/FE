@@ -42,11 +42,18 @@ class _ChatScreenState extends State<ChatScreen> {
   void playNextAudio() async {
     print(playlist);
     if (playlist.isNotEmpty) {
+      setState(() {
+        _talkingAI = true;
+      });
       print("HERE!");
       // If there are any URLs in the queue...
       await player.setUrl(playlist.removeAt(0));
       await player.play(); // Start playing.
       await player.pause();
+    } else {
+      setState(() {
+        _talkingAI = false;
+      });
     }
   }
 
@@ -84,31 +91,29 @@ class _ChatScreenState extends State<ChatScreen> {
   void getGif() async {
     final uid = Provider.of<UserProvider>(context, listen: false).getUser.uid;
     final drawingId = widget.drawingNumber;
-    print(uid);
-    print(drawingId);
+
     final response = await http.get(
       Uri.parse(
           'http://www.det4.site:5000/animation/?user_id=$uid&drawing_id=$drawingId'),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.statusCode);
     final jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    for (var item in jsonResponse) {
-      animationLinks[item['purpose']] = item['link'];
-    }
-    print("what'sgoing on");
-    setState() {}
 
-    print(animationLinks['talking1']);
-    print(animationLinks['listen1']);
-    print(animationLinks['wait1']);
+    setState(() {
+      for (var item in jsonResponse) {
+        animationLinks[item['purpose']] = item['link'];
+        print(item['link']);
+        print("@@@@@@@@@");
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    aiText = "${widget.charName}: ";
     getGif();
+
     listen();
     player.playerStateStream.listen((state) {
       if (state.playing) {}
@@ -390,6 +395,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             onTap: () {
                               if (_ableRecording) {
                                 _onRecordButtonPressed();
+                                setState(() {
+                                  aiText = "${widget.charName}: ";
+                                });
                               }
                             },
                             child: Align(

@@ -22,10 +22,6 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xff411972),
       ),
       home: const FirstScreen(),
-      // home: ChatScreen(
-      //   drawingNumber: 6,
-      //   audioRecorderController: AudioRecorderController(),
-      // ),
     );
   }
 }
