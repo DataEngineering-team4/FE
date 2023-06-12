@@ -1,14 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/first_screen.dart';
 import 'providers/user_provider.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => UserProvider(),
-    child: const MyApp(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runZonedGuarded<Future<void>>(() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.storage,
+      Permission.manageExternalStorage,
+    ].request();
+
+    runApp(ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: const MyApp(),
+    ));
+  }, (error, stack) => {print(error)});
 }
 
 class MyApp extends StatelessWidget {

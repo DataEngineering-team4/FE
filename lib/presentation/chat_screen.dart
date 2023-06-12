@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ai4005_fe/presentation/select_character_screen.dart';
 import 'package:ai4005_fe/view_model/audio_recorder_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isRecording = false;
   bool _ableRecording = true;
   static bool _talkingAI = false;
-  Map<String, String> animationLinks = {};
+  late Future<Map<String, String>> animationLinks;
   String aiText = "";
 
   final player = AudioPlayer();
@@ -88,7 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void getGif() async {
+  Future<Map<String, String>> getGif() async {
+    Map<String, String> animationLinks = {};
     final uid = Provider.of<UserProvider>(context, listen: false).getUser.uid;
     final drawingId = widget.drawingNumber;
 
@@ -99,21 +101,20 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     final jsonResponse = jsonDecode(response.body);
 
-    setState(() {
-      for (var item in jsonResponse) {
-        animationLinks[item['purpose']] = item['link'];
-        print(item['link']);
-        print("@@@@@@@@@");
-      }
-    });
+    for (var item in jsonResponse) {
+      animationLinks[item['purpose']] = item['link'];
+      print(item['link']);
+      print("@@@@@@@@@");
+    }
+
+    return animationLinks;
   }
 
   @override
   void initState() {
     super.initState();
     aiText = "${widget.charName}: ";
-    getGif();
-
+    animationLinks = getGif();
     listen();
     player.playerStateStream.listen((state) {
       if (state.playing) {}
@@ -201,7 +202,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.pop(context);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  const SelectCharacterScreen())),
+                                          (Route<dynamic> route) => false,
+                                        );
                                       },
                                       child: Text(
                                         widget.charName,
@@ -337,23 +344,37 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                     width: 332 * fem,
                                     height: 332 * fem,
-                                    child: _talkingAI
-                                        ? Image.network(
-                                            animationLinks['talking1'] ??
-                                                "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
-                                            fit: BoxFit.cover,
-                                          )
-                                        : _ableRecording
-                                            ? Image.network(
-                                                animationLinks['wait1'] ??
-                                                    "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                animationLinks['listen1'] ??
-                                                    "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
-                                                fit: BoxFit.fitHeight,
-                                              ),
+                                    child: FutureBuilder(
+                                      future: animationLinks,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          Map<String, String> links = snapshot
+                                              .data as Map<String, String>;
+                                          return _talkingAI
+                                              ? Image.network(
+                                                  links['talking1'] ??
+                                                      "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : _ableRecording
+                                                  ? Image.network(
+                                                      links['wait1'] ??
+                                                          "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.network(
+                                                      links['listen1'] ??
+                                                          "https://media.tenor.com/ped8-MGZjJMAAAAC/loading-slow-internet.gif",
+                                                      fit: BoxFit.fitHeight,
+                                                    );
+                                        } else {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),

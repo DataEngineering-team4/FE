@@ -34,10 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (response == "success") {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: ((context) => const SelectCharacterScreen())));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => const SelectCharacterScreen())),
+        (Route<dynamic> route) => false,
+      );
     } else {
       showSnackBar(response, context);
     }
@@ -94,10 +96,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const SignupScreen())));
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => const SignupScreen())),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                   child: Text(
                     "회원가입",

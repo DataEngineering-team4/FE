@@ -46,7 +46,13 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("initState@@@@@@");
     getFriends();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -132,7 +138,7 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                           if (selected_index == -1) {
                             showSnackBar("친구를 골라 주세요.", context);
                           } else {
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ChatScreen(
@@ -141,7 +147,8 @@ class _SelectCharacterScreenState extends State<SelectCharacterScreen> {
                                           ['id'],
                                       audioRecorderController:
                                           AudioRecorderController()),
-                                ));
+                                ),
+                                (route) => false);
                           }
                         },
                         child: Button(
