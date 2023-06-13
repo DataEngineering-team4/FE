@@ -95,7 +95,21 @@ flutter:
   fonts:
     - family: SUITE
       fonts:
-        - asset: assets/fonts/SUITE-Variable.ttf
+        - asset: assets/fonts/SUITE-Light.ttf
+          weight: 100
+        - asset: assets/fonts/SUITE-Medium.ttf
+          weight: 200
+        - asset: assets/fonts/SUITE-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/SUITE-Heavy.ttf
+          weight: 400
+        - asset: assets/fonts/SUITE-SemiBold.ttf
+          weight: 500
+        - asset: assets/fonts/SUITE-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/SUITE-ExtraBold.ttf
+          weight: 700
+
     #   - family: Schyler
     #     fonts:
     #       - asset: fonts/Schyler-Regular.ttf
