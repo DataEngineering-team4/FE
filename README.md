@@ -1,16 +1,15 @@
-# ai4005_fe
+# DrawnTalk
 
-A new Flutter project.
+This repository contains the mobile side of our application, which allows children to converse with their own drawings. We've developed it using Flutter.
 
-## Getting Started
+## How to Run
 
-This project is a starting point for a Flutter application.
+Here's how you can run the code on your own:
 
-A few resources to get you started if this is your first Flutter project:
+1. Open the command palette in VS Code with `CMD + Shift + P`.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Run the `Flutter: Select Device` command and choose the mobile device you have connected.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Build and run the source code with `flutter run`.
+
+Please note that you'll need to have Flutter and Dart properly set up on your machine to run this application.
