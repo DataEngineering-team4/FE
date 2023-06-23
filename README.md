@@ -17,7 +17,7 @@ Please note that you'll need to have Flutter and Dart properly set up on your ma
 
 ## Page
 ![시작 페이지](https://github.com/DataEngineering-team4/FE/assets/31652115/b857673d-6a89-4a95-9a69-94d9b0114045)
-![6](https://github.com/DataEngineering-team4/FE/assets/31652115/23751eb2-c8e0-4170-9179-05ef13c8c13a){: width="100"}
+![6](https://github.com/DataEngineering-team4/FE/assets/31652115/23751eb2-c8e0-4170-9179-05ef13c8c13a){: width="100" height=""}
 ![동영상](https://github.com/DataEngineering-team4/FE/assets/31652115/f827a8d2-d58c-4d91-946e-5d1e3bf4b017){: width="200"}
 ![쿡히](https://github.com/DataEngineering-team4/FE/assets/31652115/06736e5b-9e9b-43ef-b49a-b64aa0b20986){: width="300"}
 ![나의-캐릭터](https://github.com/DataEngineering-team4/FE/assets/31652115/6a39da39-7ef6-4b69-b42b-536813e680c0)
